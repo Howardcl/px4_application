@@ -1,8 +1,8 @@
 #ifndef PX4_APPLICATION_GCS_DISPLAY_H_
 #define PX4_APPLICATION_GCS_DISPLAY_H_
 
-#include "ros_base.h"
-#include "status_subscriber.h"
+#include "ros_base/ros_base.h"
+#include "subscriber/status_subscriber.h"
 #include "px4_application/UavCommand.h"
 
 class GcsDisplay : public RosBase
@@ -15,6 +15,8 @@ private:
     ros::Time begin_time;
     ros::Subscriber uav_command_sub;
 
+    int own_id;
+    char c_id;
     StatusSubscriber current_info;    //无人机与目标状态
     px4_application::UavCommand command_reception;
 

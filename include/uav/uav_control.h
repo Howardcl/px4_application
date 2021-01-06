@@ -3,9 +3,9 @@
 
 #include <mavros_msgs/PositionTarget.h>
 #include <geometry_msgs/PoseStamped.h>
-#include "ros_base.h"
+#include "ros_base/ros_base.h"
 #include "px4_application/UavCommand.h"
-#include "pid_controller.h"
+#include "utility/pid_controller.h"
 
 class UavControl : public RosBase
 {
@@ -25,6 +25,7 @@ private:
     PidController PositionX;
     PidController PositionY;
     PidController PositionZ;
+    int own_id;
 
     void CommandCallback(const px4_application::UavCommand::ConstPtr& _msg);
     void PositionCallback(const geometry_msgs::PoseStamped::ConstPtr& _msg);

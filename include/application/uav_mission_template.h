@@ -1,10 +1,10 @@
-#ifndef PX4_APPLICATION_UAV_COLLABORATION_H_
-#define PX4_APPLICATION_UAV_COLLABORATION_H_
+#ifndef PX4_APPLICATION_UAV_MISSION_TEMPLATE_H_
+#define PX4_APPLICATION_UAV_MISSION_TEMPLATE_H_
 
-#include "ros_base.h"
-#include "status_subscriber.h"
+#include "ros_base/ros_base.h"
+#include "subscriber/status_subscriber.h"
 #include "px4_application/UavCommand.h"
-#include "pid_controller.h"
+#include "utility/pid_controller.h"
 
 class States
 {
@@ -53,39 +53,18 @@ private:
     bool takeoff_id;    //false绝对起飞 true相对起飞
 };
 
-class Assemble : public States
+class Mission : public States
 {
 public:
-    Assemble();
-    ~Assemble();
+    Mission();
+    ~Mission();
 private:
     virtual void Run(const StatusSubscriber& _current_info,
                       const ros::Publisher& _uav_command_pub,
                        px4_application::UavCommand* _command_deliver,
                         States** _State);
-    geometry_msgs::Vector3 assemble_position;
-};
-
-class Tracking : public States
-{
-public:
-    Tracking();
-    ~Tracking();
-private:
-    virtual void Run(const StatusSubscriber& _current_info,
-                      const ros::Publisher& _uav_command_pub,
-                       px4_application::UavCommand* _command_deliver,
-                        States** _State);
-    geometry_msgs::Vector3 tracking_position;    //相机坐标系下的追踪
-    double tracking_yaw;
-    geometry_msgs::Vector3 tracking_threshold;
-    PidController TrackingX;
-    PidController TrackingY;
-    PidController TrackingZ;
-    bool debug_id;
+    geometry_msgs::Vector3 mission_position;
     int own_id;
-    std::string saved_file_path;
-    
     OtherSubscriber total_info;    //所有无人机信息
 };
 
@@ -128,11 +107,11 @@ private:
                         States** _State);
 };
 
-class UavCollaboration : public RosBase 
+class UavMission : public RosBase 
 {
 public:
-    UavCollaboration(const ros::NodeHandle& _nh, double _period);
-    ~UavCollaboration();
+    UavMission(const ros::NodeHandle& _nh, double _period);
+    ~UavMission();
     
 private:
 

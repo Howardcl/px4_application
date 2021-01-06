@@ -4,7 +4,7 @@
 #include <mavros_msgs/CommandBool.h>
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
-#include "ros_base.h"
+#include "ros_base/ros_base.h"
 
 class GcsSetting : public RosBase
 {
@@ -17,6 +17,7 @@ private:
     ros::ServiceClient uav_set_mode_client;
     ros::ServiceClient uav_arming_client;
 
+    int own_id;
     mavros_msgs::State current_state_uav;
     std::string control_mode;
     bool armed_cmd;

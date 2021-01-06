@@ -1,7 +1,7 @@
 #ifndef PX4_APPLICATION_FLITERSLP_H_
 #define PX4_APPLICATION_FLITERSLP_H_
 
-#include "math_utils.h"
+#include "utility/math_utils.h"
 
 class FiltersLP
 {
