@@ -145,6 +145,7 @@ include_directories(
  add_executable(gcs_setting src/gcs/gcs_setting.cpp)
  add_executable(gcs_display src/gcs/gcs_display.cpp)
  add_executable(uav_control src/uav/uav_control.cpp)
+ add_executable(uav_estimator src/uav/uav_estimator.cpp)
  add_executable(uav_collaboration src/application/uav_collaboration.cpp)
  add_executable(uav_mission_template src/application/uav_mission_template.cpp)
 ## Rename C++ executable without prefix
@@ -176,6 +177,11 @@ include_directories(
    ${catkin_LIBRARIES}
  )
  add_dependencies(uav_control ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ 
+ target_link_libraries(uav_estimator
+   ${catkin_LIBRARIES}
+ )
+ add_dependencies(uav_estimator ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
  target_link_libraries(uav_collaboration
    ${catkin_LIBRARIES}
