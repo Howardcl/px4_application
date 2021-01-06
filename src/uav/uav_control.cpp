@@ -6,16 +6,17 @@
 * @author   lddddd
 *           Email: lddddd1997@gmail.com
 *           Github: https://github.com/lddddd1997
-* @date     2020.9.07
-* @version  2.1
+* @date     2021.1.06
+* @version  2.2
 * @par      Edit history:
 *           1.0: lddddd, 2020.5.24, .
 *           1.1: lddddd, 2020.7.06, 内部指令输入全部修改为速度输入.
 *           2.0: lddddd, 2020.7.21, 更新节点句柄与topic的命名空间.
-×           2.1: lddddd, 2020.9.07, 修正固件版本导致的Body heading坐标系下控制指令方向的错误(Firmware 1.9.2)Body: Head X+  Left Y+  Up Z+ (Firmware 1.10.1)Body: Head Y+  Right X+  Up Z+)注：以1.9.2为基准
+*           2.1: lddddd, 2020.9.07, 修正固件版本导致的Body heading坐标系下控制指令方向的错误(Firmware 1.9.2)Body: Head X+  Left Y+  Up Z+ (Firmware 1.10.1)Body: Head Y+  Right X+  Up Z+)注：以1.9.2为基准
+*           2.2: lddddd, 2021.1.06, 添加终端界面的无人机id显示.
 */
 
-#include "uav_control.h"
+#include "uav/uav_control.h"
 
 void UavControl::CommandCallback(const px4_application::UavCommand::ConstPtr& _msg)
 {
@@ -49,6 +50,7 @@ void UavControl::Initialize(void)
                                                                                      this,
                                                                                       ros::TransportHints().tcpNoDelay());
     ros::NodeHandle nh("~");
+    nh.param<int>("uav_id", this->own_id, 0);
     PidParameters param;
     nh.param<float>("pid_xy/position/kp", param.kp, 1.0);
     nh.param<float>("pid_xy/position/ki", param.ki, 0.0);
@@ -67,6 +69,7 @@ void UavControl::Initialize(void)
     nh.param<float>("pid_z/position/integral_max", param.integral_max, 2.0);
     nh.param<float>("pid_z/position/output_max", param.output_max, 2.0);    //QGC Z速度最大上升默认3m/s 下降1m/s
     this->PositionZ.SetParameters(param);
+    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>uav_" << this->own_id << " parameters<<<<<<<<<<<<<<<<<<<<<<<<<<<<< " << std::endl;
     std::cout << "----------X position controller parameters----------" << std::endl;
     this->PositionX.PrintParameters();
     std::cout << "----------Y position controller parameters----------" << std::endl;

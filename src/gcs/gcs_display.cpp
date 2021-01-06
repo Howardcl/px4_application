@@ -6,14 +6,15 @@
 * @author   lddddd
 *           Email: lddddd1997@gmail.com
 *           Github: https://github.com/lddddd1997
-* @date     2020.7.21
-* @version  2.0
+* @date     2021.1.06
+* @version  2.1
 * @par      Edit history:
 *           1.0: lddddd, 2020.5.24, .
 *           2.0: lddddd, 2020.7.21, 更新节点句柄与topic的命名空间.
+*           2.1: lddddd, 2021.1.06, 添加终端界面的无人机id显示.
 */
 
-#include "gcs_display.h"
+#include "gcs/gcs_display.h"
 
 void GcsDisplay::CommandCallback(const px4_application::UavCommand::ConstPtr& _msg)
 {
@@ -41,6 +42,9 @@ void GcsDisplay::LoopTask(void)
 
 void GcsDisplay::Initialize(void)
 {
+    ros::NodeHandle nh("~");
+    nh.param<int>("uav_id", this->own_id, 0);
+    c_id = this->own_id + '0';
     this->begin_time = ros::Time::now();
     this->current_info.uav_status.state.mode = "UNKNOWN";
     this->command_reception.task_name = "UNKNOWN";
@@ -52,7 +56,6 @@ void GcsDisplay::Initialize(void)
 }
 void GcsDisplay::UavStateDisplay(void)
 {
-    std::cout << "---------------------------------State Info----------------------------------" << std::endl;
     /*固定的浮点显示*/
     std::cout.setf(std::ios::fixed);
     /*setprecision(n) 设显示小数精度为n位*/
@@ -64,6 +67,8 @@ void GcsDisplay::UavStateDisplay(void)
     /*强制显示符号*/
     std::cout.setf(std::ios::showpos);
 
+    std::cout << "----------------------------------[Uav " << c_id << "]------------------------------------" << std::endl;
+    std::cout << "---------------------------------State Info----------------------------------" << std::endl;
     std::cout << "Time:" << std::setw(8) << GetTimePassSec() << " [s] ";
 
     /*是否和飞控建立起连接*/
