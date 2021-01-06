@@ -6,13 +6,14 @@
 * @author   lddddd
 *           Email: lddddd1997@gmail.com
 *           Github: https://github.com/lddddd1997
-* @date     2020.11.9
-* @version  1.0
+* @date     2021.1.06
+* @version  1.1
 * @par      Edit history:
-*           1.0: lddddd, 2020.11.9, .
+*           1.0: lddddd, 2020.11.9, 无人机任务模板.
+*           1.1: lddddd, 2021.1.06, 增加了无人机的真值估计节点，实现了仿真环境中的坐标统一.
 */
 
-#include "uav_mission_template.h"
+#include "application/uav_mission_template.h"
 
 void UavMission::LoopTask(void)
 {
@@ -258,7 +259,7 @@ void Mission::Run(const StatusSubscriber& _current_info,
             _command_deliver->xyz_id = px4_application::UavCommand::PX_PY_PZ;
             _command_deliver->yaw_id = px4_application::UavCommand::YAW;
             _command_deliver->frame_id = px4_application::UavCommand::LOCAL;
-            _command_deliver->x = total_info.uav_status[OtherSubscriber::uav_1].local_position.x;
+            _command_deliver->x = total_info.uav_status[OtherSubscriber::uav_1].local_position.x + 2;
             _command_deliver->y = total_info.uav_status[OtherSubscriber::uav_1].local_position.y;
             _command_deliver->z = total_info.uav_status[OtherSubscriber::uav_1].local_position.z;
             // _command_deliver->yaw = lock_yaw_;
@@ -280,7 +281,7 @@ void Mission::Run(const StatusSubscriber& _current_info,
             _command_deliver->xyz_id = px4_application::UavCommand::PX_PY_PZ;
             _command_deliver->yaw_id = px4_application::UavCommand::YAW;
             _command_deliver->frame_id = px4_application::UavCommand::LOCAL;
-            _command_deliver->x = total_info.uav_status[OtherSubscriber::uav_1].local_position.x;
+            _command_deliver->x = total_info.uav_status[OtherSubscriber::uav_1].local_position.x + 4;
             _command_deliver->y = total_info.uav_status[OtherSubscriber::uav_1].local_position.y;
             _command_deliver->z = total_info.uav_status[OtherSubscriber::uav_1].local_position.z;
             // _command_deliver->yaw = lock_yaw_;
@@ -302,7 +303,7 @@ void Mission::Run(const StatusSubscriber& _current_info,
             _command_deliver->xyz_id = px4_application::UavCommand::PX_PY_PZ;
             _command_deliver->yaw_id = px4_application::UavCommand::YAW;
             _command_deliver->frame_id = px4_application::UavCommand::LOCAL;
-            _command_deliver->x = total_info.uav_status[OtherSubscriber::uav_1].local_position.x;
+            _command_deliver->x = total_info.uav_status[OtherSubscriber::uav_1].local_position.x + 6;
             _command_deliver->y = total_info.uav_status[OtherSubscriber::uav_1].local_position.y;
             _command_deliver->z = total_info.uav_status[OtherSubscriber::uav_1].local_position.z;
             // _command_deliver->yaw = lock_yaw_;
@@ -324,7 +325,7 @@ void Mission::Run(const StatusSubscriber& _current_info,
             _command_deliver->xyz_id = px4_application::UavCommand::PX_PY_PZ;
             _command_deliver->yaw_id = px4_application::UavCommand::YAW;
             _command_deliver->frame_id = px4_application::UavCommand::LOCAL;
-            _command_deliver->x = total_info.uav_status[OtherSubscriber::uav_1].local_position.x;
+            _command_deliver->x = total_info.uav_status[OtherSubscriber::uav_1].local_position.x + 8;
             _command_deliver->y = total_info.uav_status[OtherSubscriber::uav_1].local_position.y;
             _command_deliver->z = total_info.uav_status[OtherSubscriber::uav_1].local_position.z;
             // _command_deliver->yaw = lock_yaw_;
@@ -336,7 +337,7 @@ void Mission::Run(const StatusSubscriber& _current_info,
         default: break;
     }
 
-    // delete *_State;
+    // delete *_State; 
     // *_State = new ReturnHome;
 }
 

@@ -14,7 +14,7 @@
 * TODO:     Add collaboration.
 */
 
-#include "uav_collaboration.h"
+#include "application/uav_collaboration.h"
 
 void UavCollaboration::LoopTask(void)
 {
