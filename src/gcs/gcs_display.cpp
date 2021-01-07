@@ -37,6 +37,8 @@ void GcsDisplay::CommandUpdateReset(void)
 void GcsDisplay::LoopTask(void)
 {
     UavStateDisplay();
+    RvizStateDisplay();
+    MatlabStateDisplay();
     // cout << "Virtual Loop Task of Derived Class !" << endl;
 }
 
@@ -53,7 +55,29 @@ void GcsDisplay::Initialize(void)
                                                                               &GcsDisplay::CommandCallback,
                                                                                this,
                                                                                 ros::TransportHints().tcpNoDelay());
+    this->rviz_pub = this->nh.advertise<nav_msgs::Path>("rviz_trajectory", 10);
+    this->matlab_pub = this->nh.advertise<geometry_msgs::PoseStamped>("matlab/display/target", 10);
 }
+
+void GcsDisplay::RvizStateDisplay(void)
+{
+    if(rviz_display_data.poses.size() > MAX_RVIZ_SIZE)
+        rviz_display_data.poses.erase(rviz_display_data.poses.begin()); // 删除首个插入的元素
+
+    rviz_display_data.poses.push_back(this->current_info.uav_status.quat_pos);
+    rviz_display_data.header.stamp = ros::Time::now();
+    rviz_display_data.header.frame_id = "map";
+    rviz_pub.publish(rviz_display_data);
+}
+
+void GcsDisplay::MatlabStateDisplay(void)
+{
+    this->matlab_display_data.pose.position.x = this->current_info.target_status.camera_position.x;
+    this->matlab_display_data.pose.position.y = this->current_info.target_status.camera_position.y;
+    this->matlab_display_data.pose.position.z = this->current_info.target_status.camera_position.z;
+    this->matlab_pub.publish(this->matlab_display_data);
+}
+
 void GcsDisplay::UavStateDisplay(void)
 {
     /*固定的浮点显示*/
@@ -228,7 +252,7 @@ void GcsDisplay::UavStateDisplay(void)
     CommandUpdateReset();
 }
 
-GcsDisplay::GcsDisplay(const ros::NodeHandle& _nh, double _period) : RosBase(_nh, _period)
+GcsDisplay::GcsDisplay(const ros::NodeHandle& _nh, double _period) : RosBase(_nh, _period), MAX_RVIZ_SIZE(1000)
 {
     Initialize();
 }
