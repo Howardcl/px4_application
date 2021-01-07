@@ -22,13 +22,8 @@ public:
 private:
     ros::NodeHandle nh;
 
-    /*matlab display*/
-    ros::Publisher matlab_pub;
-    geometry_msgs::PoseStamped matlab_target_data;
-
     /*目标*/
     // ros::Subscriber target_sub;
-
     // void TargetDetectCallback(const MonoCamera::object::ConstPtr& _msg);
 
     /*无人机*/
@@ -84,7 +79,6 @@ StatusSubscriber::StatusSubscriber()
     //                                                             &StatusSubscriber::TargetDetectCallback,
     //                                                              this,
     //                                                               ros::TransportHints().tcpNoDelay());
-    this->matlab_pub = this->nh.advertise<geometry_msgs::PoseStamped>("matlab/display/target", 10);
 }
 
 StatusSubscriber::~StatusSubscriber()
@@ -102,6 +96,7 @@ void StatusSubscriber::PositionCallback(const geometry_msgs::PoseStamped::ConstP
     this->uav_status.local_position.x = _msg->pose.position.x;
     this->uav_status.local_position.y = _msg->pose.position.y;
     this->uav_status.local_position.z = _msg->pose.position.z;
+    this->uav_status.quat_pos = *_msg;
 }
 
 void StatusSubscriber::VelocityCallback(const geometry_msgs::TwistStamped::ConstPtr& _msg)
@@ -139,12 +134,6 @@ void StatusSubscriber::ExtendedStateCallback(const mavros_msgs::ExtendedState::C
 //     this->target_status.camera_position.x = _msg->object_position.x / 100.0;
 //     this->target_status.camera_position.y = _msg->object_position.y / 100.0;
 //     this->target_status.camera_position.z = _msg->object_position.z / 100.0;
-
-//     this->matlab_target_data.pose.position.x = this->target_status.camera_position.x;
-//     this->matlab_target_data.pose.position.y = this->target_status.camera_position.y;
-//     this->matlab_target_data.pose.position.z = this->target_status.camera_position.z;
-//     this->matlab_target_data.pose.orientation.w = this->target_status.update;
-//     this->matlab_pub.publish(this->matlab_target_data);
 // }
 
 class OtherSubscriber
